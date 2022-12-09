@@ -1,44 +1,64 @@
-var arr = [
+const arr = [
   { name: "Raju", image: "./1.jpg", status: "Stranger" },
-  { name: "Shyam", image: "./2.jpg", status: "Friend" },
-  { name: "Babu Bhaiya", image: "./3.jpg", status: "Request Pending" },
+  { name: "Shyam", image: "./2.jpg", status: "Stranger" },
+  { name: "Babu Bhaiya", image: "./3.jpg", status: "Stranger" },
 ];
 
-var cluster = "";
+// `map` over the array and produce an array of
+// strings which is `joined` up at the end of the iteration
+const html = arr
+  .map((obj) => {
+    return ` 
+    <div id="card"> 
+    <img src="${obj.image}" alt="">
+    <h3>${obj.name}</h3>
+    <p>${obj.status}</p>
+    <button type="button">Send Request</button>
+    </div>
+  `;
+  })
+  .join("");
 
-arr.forEach(function (val) {
-  cluster =
-    cluster +
-    `
-            <div id="card"> 
-                    <img src="${val.image}" alt="">
-                    <h1>${val.name}</h1>
-                    <p>${val.status}</p>
-                    <button>Send Request</button>
-                    </div>
-            `;
-});
+// Cache the container/cluster elements
+const cluster = document.querySelector("#cluster");
+const container = document.querySelector(".container");
 
-document.getElementById("cluster").innerHTML = cluster;
+// Add the event listener to the container
+container.addEventListener("click", handleClick);
 
-var btn = document.querySelector("button");
-var fact = 0;
-btn.addEventListener("click", function () {
-  if (fact == 0) {
-    var timer = setTimeout(() => {
-      document.querySelector("p").textContent = "Friend";
-      document.querySelector("p").style.color = "rgb(66, 178, 113";
-      document.querySelector("button").textContent = "Cancel";
-    }, 2000);
-    fact = 1;
-    document.querySelector("p").textContent = "Request Pending";
-    document.querySelector("button").textContent = "Send Request";
-  } else {
-    clearTimeout(timer);
-    fact = 0;
-    document.querySelector("p").textContent = "Strenger";
-    document.querySelector("p").style.color = "rgb(221, 66, 66)";
-    document.querySelector("button").textContent = "Send Request";
-    fact = 0;
+// Add the HTML to the cluster element
+cluster.innerHTML = html;
+
+// When the listener catches an event...
+function handleClick(e) {
+  // ...first check that it's a button...
+  if (e.target.matches("button")) {
+    // ...destructure the previous element sibling
+    // element (relabeling it as `para`), and the textContent
+    // from the clicked element
+    const { previousElementSibling: para, textContent } = e.target;
+
+    // Depending on the text content value
+    // choose the path to take
+    switch (textContent) {
+      case "Send Request": {
+        para.textContent = "Request Pending";
+        e.target.disabled = true;
+        setTimeout(() => {
+          para.textContent = "Friend";
+          para.className = "friend";
+          e.target.textContent = "Cancel";
+          e.target.disabled = false;
+        }, 2000);
+        break;
+      }
+
+      case "Cancel": {
+        para.textContent = "Strenger";
+        para.className = "strenger";
+        e.target.textContent = "Send Request";
+        break;
+      }
+    }
   }
-});
+}
