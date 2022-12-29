@@ -1,64 +1,47 @@
 const arr = [
-  { name: "Raju", image: "./1.jpg", status: "Stranger" },
-  { name: "Shyam", image: "./2.jpg", status: "Stranger" },
-  { name: "Babu Bhaiya", image: "./3.jpg", status: "Stranger" },
-];
+  { name: "Raju", image: "./1.jpg", status: "Stranger" ,btn:"Add Friend" },
+  { name: "Shyam", image: "./2.jpg", status: "Stranger" ,btn:"Add Friend" },
+  { name: "Babu Bhaiya", image: "./3.jpg", status: "Stranger" ,btn:"Add Friend" },
+]
 
-// `map` over the array and produce an array of
-// strings which is `joined` up at the end of the iteration
-const html = arr
-  .map((obj) => {
-    return ` 
-    <div id="card"> 
-    <img src="${obj.image}" alt="">
-    <h3>${obj.name}</h3>
-    <p>${obj.status}</p>
-    <button type="button">Send Request</button>
-    </div>
-  `;
-  })
-  .join("");
+function show(){
+  var cluster = "";
+  arr.forEach(function(val , index){
+  cluster += `<div id="card">
+  <img src="${val.image}" alt="">
+  <h3>${val.name}</h3>
+  <p id="${val.status}">${val.status}</p>
+  <button id="${index}" type="button">${val.btn}</button>
+  </div>`;
+})
+document.getElementById("cards").innerHTML = cluster;
+};
+show();
 
-// Cache the container/cluster elements
-const cluster = document.querySelector("#cluster");
-const container = document.querySelector(".container");
+var card = document.getElementById("cards")
+var a =0;
+card.addEventListener("click", function(dets){
+  if(a===0) {
 
-// Add the event listener to the container
-container.addEventListener("click", handleClick);
-
-// Add the HTML to the cluster element
-cluster.innerHTML = html;
-
-// When the listener catches an event...
-function handleClick(e) {
-  // ...first check that it's a button...
-  if (e.target.matches("button")) {
-    // ...destructure the previous element sibling
-    // element (relabeling it as `para`), and the textContent
-    // from the clicked element
-    const { previousElementSibling: para, textContent } = e.target;
-
-    // Depending on the text content value
-    // choose the path to take
-    switch (textContent) {
-      case "Send Request": {
-        para.textContent = "Request Pending";
-        e.target.disabled = true;
-        setTimeout(() => {
-          para.textContent = "Friend";
-          para.className = "friend";
-          e.target.textContent = "Cancel";
-          e.target.disabled = false;
-        }, 2000);
-        break;
-      }
-
-      case "Cancel": {
-        para.textContent = "Strenger";
-        para.className = "strenger";
-        e.target.textContent = "Send Request";
-        break;
-      }
-    }
+    arr[dets.target.id].status = "Requested",
+    arr[dets.target.id].btn = "Cancel Request",
+    show();
+    
+    setTimeout(() => {
+      
+      arr[dets.target.id].status = "Friend",
+      arr[dets.target.id].btn = "Remove Friend",
+      show();
+      
+    }, "3000")
+    // arr[dets.target.id].index = "Remove";
+    // show();
+    a=1;
   }
-}
+  else {
+    arr[dets.target.id].status = "Stranger";
+    arr[dets.target.id].btn = "Add Friend",
+    show();
+    a=0;
+  }
+});

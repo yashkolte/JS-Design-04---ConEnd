@@ -139,3 +139,15 @@
   font-weight: 500;
   cursor: pointer;
 }
+
+#Stranger {
+  color:rgb(212, 115, 83) !important;
+}
+
+#Friend {
+  color:rgb(83, 212, 147) !important;
+}
+
+#Requested {
+  color:rgb(252, 14, 14) !important;
+}
